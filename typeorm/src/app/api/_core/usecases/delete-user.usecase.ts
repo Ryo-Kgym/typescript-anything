@@ -1,4 +1,4 @@
-import { UserGateway } from "@/app/api/_core/gateways/user-gateway";
+import { UserGateway } from "../gateways/user-gateway";
 
 /**
  * ユーザー削除ユースケースのインターフェース

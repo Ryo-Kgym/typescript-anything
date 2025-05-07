@@ -1,22 +1,22 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import { type NextRequest } from "next/server";
 import { UpdateUserInteractor } from "../../_core/usecases/update-user.usecase";
 import { ServerUserGateway } from "../server-user-gateway";
+import { DeleteUserInteractor } from "../../_core/usecases/delete-user.usecase";
 
 // Create instances of gateways and interactors
 const serverUserGateway = new ServerUserGateway();
 const updateUserInteractor = new UpdateUserInteractor(serverUserGateway);
-
-// Import the DeleteUserUseCase implementation
-import { DeleteUserInteractor } from "../../_core/usecases/delete-user.usecase";
 const deleteUserInteractor = new DeleteUserInteractor(serverUserGateway);
 
 // GET /api/users/[id] - Get user by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+
+    const id = parseInt((await params).id);
 
     try {
       const user = await serverUserGateway.getUserById(id);
@@ -38,11 +38,11 @@ export async function GET(
 
 // PUT /api/users/[id] - Update user by ID
 export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const id = parseInt((await params).id);
     const userData = await request.json();
 
     try {
@@ -65,11 +65,11 @@ export async function PUT(
 
 // DELETE /api/users/[id] - Delete user by ID
 export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const id = parseInt((await params).id);
 
     try {
       await deleteUserInteractor.execute(id);
