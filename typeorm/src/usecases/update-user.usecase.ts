@@ -4,31 +4,31 @@ import { UserGateway } from "@/gateways/user-gateway";
 import apiUserGateway from "@/gateways/api-user-gateway";
 
 /**
- * Interface for the UpdateUser usecase
+ * ユーザー更新ユースケースのインターフェース
  */
 export interface UpdateUserUseCase {
   execute(id: number, userData: Omit<UserFormData, "id">): Promise<User>;
 }
 
 /**
- * Implementation of the UpdateUser usecase
+ * ユーザー更新ユースケースの実装
  */
 export class UpdateUserInteractor implements UpdateUserUseCase {
   private userGateway: UserGateway;
 
   /**
-   * Constructor
-   * @param userGateway The user gateway to use
+   * コンストラクタ
+   * @param userGateway 使用するユーザーゲートウェイ
    */
   constructor(userGateway: UserGateway) {
     this.userGateway = userGateway;
   }
 
   /**
-   * Execute the usecase to update an existing user
-   * @param id The ID of the user to update
-   * @param userData The updated user data
-   * @returns Promise with the updated user
+   * 既存のユーザーを更新するユースケースを実行する
+   * @param id 更新するユーザーのID
+   * @param userData 更新されたユーザーデータ
+   * @returns 更新されたユーザーを含むPromise
    */
   async execute(id: number, userData: Omit<UserFormData, "id">): Promise<User> {
     return await this.userGateway.updateUser(id, userData);

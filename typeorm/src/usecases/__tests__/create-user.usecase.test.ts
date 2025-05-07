@@ -8,12 +8,12 @@ describe('CreateUserInteractor', () => {
   let createUserInteractor: CreateUserInteractor;
 
   beforeEach(() => {
-    // Create a new instance of the mock gateway for each test
+    // 各テストのためにモックゲートウェイの新しいインスタンスを作成
     mockUserGateway = new MockUserGateway();
     createUserInteractor = new CreateUserInteractor(mockUserGateway);
   });
 
-  it('should create a new user', async () => {
+  it('新しいユーザーを作成すること', async () => {
     // Arrange
     const userData: Omit<UserFormData, 'id'> = {
       firstName: 'John',
@@ -26,22 +26,33 @@ describe('CreateUserInteractor', () => {
     const result = await createUserInteractor.execute(userData);
 
     // Assert
-    expect(result).toBeDefined();
-    expect(result.id).toBe(1); // First user should have ID 1
-    expect(result.firstName).toBe('John');
-    expect(result.lastName).toBe('Doe');
-    expect(result.email).toBe('john@example.com');
-    expect(result.isActive).toBe(true);
+    expect(result).toEqual({
+      id: 1, // 最初のユーザーはID 1を持つべき
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john@example.com',
+      isActive: true,
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt
+    });
     expect(result.createdAt).toBeInstanceOf(Date);
     expect(result.updatedAt).toBeInstanceOf(Date);
 
-    // Verify the user was added to the gateway
+    // ユーザーがゲートウェイに追加されたことを確認
     const users = await mockUserGateway.getUsers();
     expect(users).toHaveLength(1);
-    expect(users[0].id).toBe(1);
+    expect(users[0]).toEqual({
+      id: 1,
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john@example.com',
+      isActive: true,
+      createdAt: users[0].createdAt,
+      updatedAt: users[0].updatedAt
+    });
   });
 
-  it('should create multiple users with unique IDs', async () => {
+  it('一意のIDを持つ複数のユーザーを作成すること', async () => {
     // Arrange
     const userData1: Omit<UserFormData, 'id'> = {
       firstName: 'John',
@@ -62,10 +73,27 @@ describe('CreateUserInteractor', () => {
     const result2 = await createUserInteractor.execute(userData2);
 
     // Assert
-    expect(result1.id).toBe(1);
-    expect(result2.id).toBe(2);
+    expect(result1).toEqual({
+      id: 1,
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john@example.com',
+      isActive: true,
+      createdAt: result1.createdAt,
+      updatedAt: result1.updatedAt
+    });
 
-    // Verify both users were added to the gateway
+    expect(result2).toEqual({
+      id: 2,
+      firstName: 'Jane',
+      lastName: 'Smith',
+      email: 'jane@example.com',
+      isActive: true,
+      createdAt: result2.createdAt,
+      updatedAt: result2.updatedAt
+    });
+
+    // 両方のユーザーがゲートウェイに追加されたことを確認
     const users = await mockUserGateway.getUsers();
     expect(users).toHaveLength(2);
   });

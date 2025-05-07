@@ -2,29 +2,29 @@ import { UserGateway } from "@/gateways/user-gateway";
 import apiUserGateway from "@/gateways/api-user-gateway";
 
 /**
- * Interface for the DeleteUser usecase
+ * ユーザー削除ユースケースのインターフェース
  */
 export interface DeleteUserUseCase {
   execute(id: number): Promise<void>;
 }
 
 /**
- * Implementation of the DeleteUser usecase
+ * ユーザー削除ユースケースの実装
  */
 export class DeleteUserInteractor implements DeleteUserUseCase {
   private userGateway: UserGateway;
 
   /**
-   * Constructor
-   * @param userGateway The user gateway to use
+   * コンストラクタ
+   * @param userGateway 使用するユーザーゲートウェイ
    */
   constructor(userGateway: UserGateway) {
     this.userGateway = userGateway;
   }
 
   /**
-   * Execute the usecase to delete a user
-   * @param id The ID of the user to delete
+   * ユーザーを削除するユースケースを実行する
+   * @param id 削除するユーザーのID
    */
   async execute(id: number): Promise<void> {
     await this.userGateway.deleteUser(id);

@@ -8,12 +8,12 @@ describe('GetUsersInteractor', () => {
   let getUsersInteractor: GetUsersInteractor;
 
   beforeEach(() => {
-    // Create a new instance of the mock gateway for each test
+    // 各テストのためにモックゲートウェイの新しいインスタンスを作成
     mockUserGateway = new MockUserGateway();
     getUsersInteractor = new GetUsersInteractor(mockUserGateway);
   });
 
-  it('should return an empty array when there are no users', async () => {
+  it('ユーザーが存在しない場合、空の配列を返すこと', async () => {
     // Arrange
     mockUserGateway.reset();
 
@@ -24,7 +24,7 @@ describe('GetUsersInteractor', () => {
     expect(result).toEqual([]);
   });
 
-  it('should return all users', async () => {
+  it('すべてのユーザーを返すこと', async () => {
     // Arrange
     const mockUsers: User[] = [
       {
@@ -53,9 +53,23 @@ describe('GetUsersInteractor', () => {
 
     // Assert
     expect(result).toHaveLength(2);
-    expect(result[0].id).toBe(1);
-    expect(result[0].firstName).toBe('John');
-    expect(result[1].id).toBe(2);
-    expect(result[1].firstName).toBe('Jane');
+    expect(result[0]).toEqual({
+      id: 1,
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john@example.com',
+      isActive: true,
+      createdAt: result[0].createdAt,
+      updatedAt: result[0].updatedAt
+    });
+    expect(result[1]).toEqual({
+      id: 2,
+      firstName: 'Jane',
+      lastName: 'Smith',
+      email: 'jane@example.com',
+      isActive: true,
+      createdAt: result[1].createdAt,
+      updatedAt: result[1].updatedAt
+    });
   });
 });

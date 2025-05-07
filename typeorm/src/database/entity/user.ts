@@ -1,5 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
+/**
+ * ユーザーエンティティ
+ * データベースのユーザーテーブルに対応するエンティティクラス
+ */
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()

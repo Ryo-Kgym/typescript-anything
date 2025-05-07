@@ -10,11 +10,11 @@ describe('UpdateUserInteractor', () => {
   let existingUser: User;
 
   beforeEach(() => {
-    // Create a new instance of the mock gateway for each test
+    // 各テストのためにモックゲートウェイの新しいインスタンスを作成
     mockUserGateway = new MockUserGateway();
     updateUserInteractor = new UpdateUserInteractor(mockUserGateway);
 
-    // Create an existing user for testing
+    // テスト用の既存ユーザーを作成
     const now = new Date();
     existingUser = {
       id: 1,
@@ -28,7 +28,7 @@ describe('UpdateUserInteractor', () => {
     mockUserGateway.setUsers([existingUser]);
   });
 
-  it('should update an existing user', async () => {
+  it('既存のユーザーを更新すること', async () => {
     // Arrange
     const updateData: Omit<UserFormData, 'id'> = {
       firstName: 'Johnny',
@@ -41,44 +41,67 @@ describe('UpdateUserInteractor', () => {
     const result = await updateUserInteractor.execute(1, updateData);
 
     // Assert
-    expect(result).toBeDefined();
-    expect(result.id).toBe(1);
-    expect(result.firstName).toBe('Johnny');
-    expect(result.lastName).toBe('Updated');
-    expect(result.email).toBe('johnny.updated@example.com');
-    expect(result.isActive).toBe(true);
-    
-    // Verify the user was updated in the gateway
+    expect(result).toEqual({
+      id: 1,
+      firstName: 'Johnny',
+      lastName: 'Updated',
+      email: 'johnny.updated@example.com',
+      isActive: true,
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt
+    });
+
+    // ユーザーがゲートウェイで更新されたことを確認
     const users = await mockUserGateway.getUsers();
     expect(users).toHaveLength(1);
-    expect(users[0].firstName).toBe('Johnny');
-    expect(users[0].lastName).toBe('Updated');
+    expect(users[0]).toEqual({
+      id: 1,
+      firstName: 'Johnny',
+      lastName: 'Updated',
+      email: 'johnny.updated@example.com',
+      isActive: true,
+      createdAt: users[0].createdAt,
+      updatedAt: users[0].updatedAt
+    });
   });
 
-  it('should only update the provided fields', async () => {
+  it('提供されたフィールドのみを更新すること', async () => {
     // Arrange
     const updateData: Omit<UserFormData, 'id'> = {
       firstName: 'Johnny',
-      lastName: 'Doe', // Same as before
-      email: 'john@example.com', // Same as before
-      isActive: true // Same as before
+      lastName: 'Doe', // 以前と同じ
+      email: 'john@example.com', // 以前と同じ
+      isActive: true // 以前と同じ
     };
 
     // Act
     const result = await updateUserInteractor.execute(1, updateData);
 
     // Assert
-    expect(result.firstName).toBe('Johnny');
-    expect(result.lastName).toBe('Doe');
-    expect(result.email).toBe('john@example.com');
-    
-    // Verify only firstName was updated in the gateway
+    expect(result).toEqual({
+      id: 1,
+      firstName: 'Johnny',
+      lastName: 'Doe',
+      email: 'john@example.com',
+      isActive: true,
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt
+    });
+
+    // firstNameのみがゲートウェイで更新されたことを確認
     const users = await mockUserGateway.getUsers();
-    expect(users[0].firstName).toBe('Johnny');
-    expect(users[0].lastName).toBe('Doe');
+    expect(users[0]).toEqual({
+      id: 1,
+      firstName: 'Johnny',
+      lastName: 'Doe',
+      email: 'john@example.com',
+      isActive: true,
+      createdAt: users[0].createdAt,
+      updatedAt: users[0].updatedAt
+    });
   });
 
-  it('should throw an error when the user does not exist', async () => {
+  it('ユーザーが存在しない場合、エラーをスローすること', async () => {
     // Arrange
     const updateData: Omit<UserFormData, 'id'> = {
       firstName: 'Johnny',

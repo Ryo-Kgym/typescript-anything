@@ -3,29 +3,29 @@ import { UserGateway } from "@/gateways/user-gateway";
 import apiUserGateway from "@/gateways/api-user-gateway";
 
 /**
- * Interface for the GetUsers usecase
+ * ユーザー一覧取得ユースケースのインターフェース
  */
 export interface GetUsersUseCase {
   execute(): Promise<User[]>;
 }
 
 /**
- * Implementation of the GetUsers usecase
+ * ユーザー一覧取得ユースケースの実装
  */
 export class GetUsersInteractor implements GetUsersUseCase {
   private userGateway: UserGateway;
 
   /**
-   * Constructor
-   * @param userGateway The user gateway to use
+   * コンストラクタ
+   * @param userGateway 使用するユーザーゲートウェイ
    */
   constructor(userGateway: UserGateway) {
     this.userGateway = userGateway;
   }
 
   /**
-   * Execute the usecase to get all users
-   * @returns Promise with array of users
+   * すべてのユーザーを取得するユースケースを実行する
+   * @returns ユーザーの配列を含むPromise
    */
   async execute(): Promise<User[]> {
     return await this.userGateway.getUsers();

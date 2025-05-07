@@ -9,11 +9,11 @@ describe('DeleteUserInteractor', () => {
   let existingUser: User;
 
   beforeEach(() => {
-    // Create a new instance of the mock gateway for each test
+    // 各テストのためにモックゲートウェイの新しいインスタンスを作成
     mockUserGateway = new MockUserGateway();
     deleteUserInteractor = new DeleteUserInteractor(mockUserGateway);
 
-    // Create an existing user for testing
+    // テスト用の既存ユーザーを作成
     const now = new Date();
     existingUser = {
       id: 1,
@@ -27,7 +27,7 @@ describe('DeleteUserInteractor', () => {
     mockUserGateway.setUsers([existingUser]);
   });
 
-  it('should delete an existing user', async () => {
+  it('既存のユーザーを削除すること', async () => {
     // Arrange
     const initialUsers = await mockUserGateway.getUsers();
     expect(initialUsers).toHaveLength(1);
@@ -40,12 +40,12 @@ describe('DeleteUserInteractor', () => {
     expect(users).toHaveLength(0);
   });
 
-  it('should throw an error when the user does not exist', async () => {
+  it('ユーザーが存在しない場合、エラーをスローすること', async () => {
     // Act & Assert
     await expect(deleteUserInteractor.execute(999)).rejects.toThrow('User with ID 999 not found');
   });
 
-  it('should only delete the specified user', async () => {
+  it('指定されたユーザーのみを削除すること', async () => {
     // Arrange
     const secondUser: User = {
       id: 2,
@@ -57,7 +57,7 @@ describe('DeleteUserInteractor', () => {
       updatedAt: new Date()
     };
     mockUserGateway.setUsers([existingUser, secondUser]);
-    
+
     const initialUsers = await mockUserGateway.getUsers();
     expect(initialUsers).toHaveLength(2);
 
@@ -67,7 +67,14 @@ describe('DeleteUserInteractor', () => {
     // Assert
     const users = await mockUserGateway.getUsers();
     expect(users).toHaveLength(1);
-    expect(users[0].id).toBe(2);
-    expect(users[0].firstName).toBe('Jane');
+    expect(users[0]).toEqual({
+      id: 2,
+      firstName: 'Jane',
+      lastName: 'Smith',
+      email: 'jane@example.com',
+      isActive: true,
+      createdAt: users[0].createdAt,
+      updatedAt: users[0].updatedAt
+    });
   });
 });

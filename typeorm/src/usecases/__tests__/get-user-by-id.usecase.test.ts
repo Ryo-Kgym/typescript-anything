@@ -8,12 +8,12 @@ describe('GetUserByIdInteractor', () => {
   let getUserByIdInteractor: GetUserByIdInteractor;
 
   beforeEach(() => {
-    // Create a new instance of the mock gateway for each test
+    // 各テストのためにモックゲートウェイの新しいインスタンスを作成
     mockUserGateway = new MockUserGateway();
     getUserByIdInteractor = new GetUserByIdInteractor(mockUserGateway);
   });
 
-  it('should return a user when the user exists', async () => {
+  it('ユーザーが存在する場合、ユーザーを返すこと', async () => {
     // Arrange
     const mockUser: User = {
       id: 1,
@@ -30,14 +30,18 @@ describe('GetUserByIdInteractor', () => {
     const result = await getUserByIdInteractor.execute(1);
 
     // Assert
-    expect(result).toBeDefined();
-    expect(result.id).toBe(1);
-    expect(result.firstName).toBe('John');
-    expect(result.lastName).toBe('Doe');
-    expect(result.email).toBe('john@example.com');
+    expect(result).toEqual({
+      id: 1,
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john@example.com',
+      isActive: true,
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt
+    });
   });
 
-  it('should throw an error when the user does not exist', async () => {
+  it('ユーザーが存在しない場合、エラーをスローすること', async () => {
     // Arrange
     mockUserGateway.reset();
 

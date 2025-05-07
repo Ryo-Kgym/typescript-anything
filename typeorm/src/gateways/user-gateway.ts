@@ -2,41 +2,41 @@ import { User } from "@/database/entity/user";
 import { UserFormData } from "@/usecases/types";
 
 /**
- * Interface for the User Gateway
- * This defines the contract for accessing user data
+ * ユーザーゲートウェイのインターフェース
+ * ユーザーデータへのアクセスに関する契約を定義する
  */
 export interface UserGateway {
   /**
-   * Get all users
-   * @returns Promise with array of users
+   * すべてのユーザーを取得する
+   * @returns ユーザーの配列を含むPromise
    */
   getUsers(): Promise<User[]>;
-  
+
   /**
-   * Get a user by ID
-   * @param id The ID of the user to fetch
-   * @returns Promise with the user
+   * IDによりユーザーを取得する
+   * @param id 取得するユーザーのID
+   * @returns ユーザーを含むPromise
    */
   getUserById(id: number): Promise<User>;
-  
+
   /**
-   * Create a new user
-   * @param userData The user data to create
-   * @returns Promise with the created user
+   * 新しいユーザーを作成する
+   * @param userData 作成するユーザーデータ
+   * @returns 作成されたユーザーを含むPromise
    */
   createUser(userData: Omit<UserFormData, "id">): Promise<User>;
-  
+
   /**
-   * Update an existing user
-   * @param id The ID of the user to update
-   * @param userData The updated user data
-   * @returns Promise with the updated user
+   * 既存のユーザーを更新する
+   * @param id 更新するユーザーのID
+   * @param userData 更新されたユーザーデータ
+   * @returns 更新されたユーザーを含むPromise
    */
   updateUser(id: number, userData: Omit<UserFormData, "id">): Promise<User>;
-  
+
   /**
-   * Delete a user
-   * @param id The ID of the user to delete
+   * ユーザーを削除する
+   * @param id 削除するユーザーのID
    */
   deleteUser(id: number): Promise<void>;
 }

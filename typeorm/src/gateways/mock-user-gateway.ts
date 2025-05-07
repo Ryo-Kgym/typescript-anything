@@ -3,14 +3,14 @@ import { UserFormData } from "@/usecases/types";
 import { UserGateway } from "./user-gateway";
 
 /**
- * Mock implementation of the User Gateway for testing
+ * テスト用のユーザーゲートウェイのモック実装
  */
 export class MockUserGateway implements UserGateway {
   private users: User[] = [];
   private nextId = 1;
 
   /**
-   * Reset the mock data
+   * モックデータをリセットする
    */
   reset(): void {
     this.users = [];
@@ -18,28 +18,28 @@ export class MockUserGateway implements UserGateway {
   }
 
   /**
-   * Set mock users data
-   * @param users The users to set
+   * モックユーザーデータを設定する
+   * @param users 設定するユーザー
    */
   setUsers(users: User[]): void {
     this.users = [...users];
-    // Update nextId to be greater than the highest ID in the users array
+    // nextIdをユーザー配列内の最大IDより大きくする
     const maxId = users.reduce((max, user) => Math.max(max, user.id), 0);
     this.nextId = maxId + 1;
   }
 
   /**
-   * Get all users
-   * @returns Promise with array of users
+   * すべてのユーザーを取得する
+   * @returns ユーザーの配列を含むPromise
    */
   async getUsers(): Promise<User[]> {
     return [...this.users];
   }
 
   /**
-   * Get a user by ID
-   * @param id The ID of the user to fetch
-   * @returns Promise with the user
+   * IDによりユーザーを取得する
+   * @param id 取得するユーザーのID
+   * @returns ユーザーを含むPromise
    */
   async getUserById(id: number): Promise<User> {
     const user = this.users.find(u => u.id === id);
@@ -50,9 +50,9 @@ export class MockUserGateway implements UserGateway {
   }
 
   /**
-   * Create a new user
-   * @param userData The user data to create
-   * @returns Promise with the created user
+   * 新しいユーザーを作成する
+   * @param userData 作成するユーザーデータ
+   * @returns 作成されたユーザーを含むPromise
    */
   async createUser(userData: Omit<UserFormData, "id">): Promise<User> {
     const now = new Date();
@@ -67,30 +67,30 @@ export class MockUserGateway implements UserGateway {
   }
 
   /**
-   * Update an existing user
-   * @param id The ID of the user to update
-   * @param userData The updated user data
-   * @returns Promise with the updated user
+   * 既存のユーザーを更新する
+   * @param id 更新するユーザーのID
+   * @param userData 更新されたユーザーデータ
+   * @returns 更新されたユーザーを含むPromise
    */
   async updateUser(id: number, userData: Omit<UserFormData, "id">): Promise<User> {
     const index = this.users.findIndex(u => u.id === id);
     if (index === -1) {
       throw new Error(`User with ID ${id} not found`);
     }
-    
+
     const updatedUser: User = {
       ...this.users[index],
       ...userData,
       updatedAt: new Date()
     };
-    
+
     this.users[index] = updatedUser;
     return { ...updatedUser };
   }
 
   /**
-   * Delete a user
-   * @param id The ID of the user to delete
+   * ユーザーを削除する
+   * @param id 削除するユーザーのID
    */
   async deleteUser(id: number): Promise<void> {
     const index = this.users.findIndex(u => u.id === id);

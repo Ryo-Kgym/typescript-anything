@@ -4,30 +4,30 @@ import { UserGateway } from "@/gateways/user-gateway";
 import apiUserGateway from "@/gateways/api-user-gateway";
 
 /**
- * Interface for the CreateUser usecase
+ * ユーザー作成ユースケースのインターフェース
  */
 export interface CreateUserUseCase {
   execute(userData: Omit<UserFormData, "id">): Promise<User>;
 }
 
 /**
- * Implementation of the CreateUser usecase
+ * ユーザー作成ユースケースの実装
  */
 export class CreateUserInteractor implements CreateUserUseCase {
   private userGateway: UserGateway;
 
   /**
-   * Constructor
-   * @param userGateway The user gateway to use
+   * コンストラクタ
+   * @param userGateway 使用するユーザーゲートウェイ
    */
   constructor(userGateway: UserGateway) {
     this.userGateway = userGateway;
   }
 
   /**
-   * Execute the usecase to create a new user
-   * @param userData The user data to create
-   * @returns Promise with the created user
+   * 新しいユーザーを作成するユースケースを実行する
+   * @param userData 作成するユーザーデータ
+   * @returns 作成されたユーザーを含むPromise
    */
   async execute(userData: Omit<UserFormData, "id">): Promise<User> {
     return await this.userGateway.createUser(userData);
