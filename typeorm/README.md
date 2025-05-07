@@ -88,7 +88,6 @@ The application provides a simple UI for managing users:
 - `src/app/api/users/[id]/route.ts`: API routes for getting, updating, and deleting a specific user
 - `src/database/connection.ts`: TypeORM database connection configuration
 - `src/database/entity/user.ts`: User entity definition
-- `src/database/repository/user-repository.ts`: Repository for User entity CRUD operations
 
 ## Notes
 

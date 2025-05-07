@@ -1,19 +1,54 @@
 import {UserGateway} from "../../../../_core/gateways/user-gateway";
 import {User} from "../../../../_core/domain/user";
-import {UserRepository} from "./user-repository";
 import {UserFormData} from "../../../../_core/usecases/types";
+import {getDataSource} from "../connection";
+import {TypeOrmUser} from "./type-orm-user";
 
 /**
  * サーバーサイドのユーザーゲートウェイ実装
- * このクラスはサーバーサイドでUserRepositoryを使用してUserGatewayインターフェースを実装する
+ * このクラスはサーバーサイドでUserGatewayインターフェースを実装する
  */
 export class ServerUserGateway implements UserGateway {
+  /**
+   * TypeORMのUserエンティティをコアドメインのUserに変換する
+   * @param typeormUser TypeORMのUserエンティティ
+   * @returns コアドメインのUser
+   */
+  private toCoreUser(typeormUser: TypeOrmUser): User {
+    return new User(
+      typeormUser.id,
+      typeormUser.firstName,
+      typeormUser.lastName,
+      typeormUser.email,
+      typeormUser.isActive,
+      typeormUser.createdAt,
+      typeormUser.updatedAt
+    );
+  }
+
+  /**
+   * コアドメインのUserからTypeORMのUserエンティティに変換するためのデータを作成する
+   * @param coreUser コアドメインのUser
+   * @returns TypeORMのUserエンティティに変換するためのデータ
+   */
+  private toTypeORMUserData(coreUser: Partial<User>): Partial<TypeOrmUser> {
+    const userData: Partial<TypeOrmUser> = {};
+
+    if (coreUser.firstName !== undefined) userData.firstName = coreUser.firstName;
+    if (coreUser.lastName !== undefined) userData.lastName = coreUser.lastName;
+    if (coreUser.email !== undefined) userData.email = coreUser.email;
+    if (coreUser.isActive !== undefined) userData.isActive = coreUser.isActive;
+
+    return userData;
+  }
   /**
    * すべてのユーザーを取得する
    * @returns ユーザーの配列を含むPromise
    */
   async getUsers(): Promise<User[]> {
-    return await UserRepository.findAll();
+    const dataSource = await getDataSource();
+    const typeormUsers = await dataSource.getRepository(TypeOrmUser).find();
+    return typeormUsers.map(user => this.toCoreUser(user));
   }
 
   /**
@@ -22,11 +57,12 @@ export class ServerUserGateway implements UserGateway {
    * @returns ユーザーを含むPromise
    */
   async getUserById(id: number): Promise<User> {
-    const user = await UserRepository.findById(id);
-    if (!user) {
+    const dataSource = await getDataSource();
+    const typeormUser = await dataSource.getRepository(TypeOrmUser).findOneBy({id});
+    if (!typeormUser) {
       throw new Error(`User with ID ${id} not found`);
     }
-    return user;
+    return this.toCoreUser(typeormUser);
   }
 
   /**
@@ -35,7 +71,11 @@ export class ServerUserGateway implements UserGateway {
    * @returns 作成されたユーザーを含むPromise
    */
   async createUser(userData: Omit<UserFormData, "id">): Promise<User> {
-    return await UserRepository.create(userData);
+    const dataSource = await getDataSource();
+    const typeormUserData = this.toTypeORMUserData(userData);
+    const typeormUser = dataSource.getRepository(TypeOrmUser).create(typeormUserData);
+    const savedTypeormUser = await dataSource.getRepository(TypeOrmUser).save(typeormUser);
+    return this.toCoreUser(savedTypeormUser);
   }
 
   /**
@@ -45,11 +85,17 @@ export class ServerUserGateway implements UserGateway {
    * @returns 更新されたユーザーを含むPromise
    */
   async updateUser(id: number, userData: Omit<UserFormData, "id">): Promise<User> {
-    const updatedUser = await UserRepository.update(id, userData);
-    if (!updatedUser) {
+    const dataSource = await getDataSource();
+    const userRepository = dataSource.getRepository(TypeOrmUser);
+    const typeormUserData = this.toTypeORMUserData(userData);
+
+    await userRepository.update(id, typeormUserData);
+
+    const typeormUser = await userRepository.findOneBy({id});
+    if (!typeormUser) {
       throw new Error(`User with ID ${id} not found`);
     }
-    return updatedUser;
+    return this.toCoreUser(typeormUser);
   }
 
   /**
@@ -57,8 +103,9 @@ export class ServerUserGateway implements UserGateway {
    * @param id 削除するユーザーのID
    */
   async deleteUser(id: number): Promise<void> {
-    const success = await UserRepository.delete(id);
-    if (!success) {
+    const dataSource = await getDataSource();
+    const result = await dataSource.getRepository(TypeOrmUser).delete(id);
+    if (!result.affected || result.affected <= 0) {
       throw new Error(`User with ID ${id} not found`);
     }
   }

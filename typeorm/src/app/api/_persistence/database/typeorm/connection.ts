@@ -1,9 +1,8 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { TypeOrmUser } from "./entity/type-orm-user";
+import { TypeOrmUser } from "./repository/type-orm-user";
 import {dbConfig, nodeEnv} from "../../../../../config/env";
 
-// Create a singleton DataSource instance
 let dataSource: DataSource | null = null;
 
 export const getDataSource = async (): Promise<DataSource> => {
