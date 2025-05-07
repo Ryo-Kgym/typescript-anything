@@ -1,4 +1,4 @@
-import { UserGateway } from "@/gateways/user-gateway";
+import { UserGateway } from "@/app/api/_core/gateways/user-gateway";
 
 /**
  * ユーザー削除ユースケースのインターフェース
@@ -29,4 +29,3 @@ export class DeleteUserInteractor implements DeleteUserUseCase {
     await this.userGateway.deleteUser(id);
   }
 }
-

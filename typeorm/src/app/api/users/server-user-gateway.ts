@@ -1,6 +1,6 @@
-import { UserGateway } from "@/gateways/user-gateway";
+import { UserGateway } from "@/app/api/_core/gateways/user-gateway";
 import { User } from "@/database/entity/user";
-import { UserFormData } from "@/usecases/types";
+import { UserFormData } from "@/app/api/_core/usecases/types";
 import { UserRepository } from "@/database/repository/user-repository";
 
 /**

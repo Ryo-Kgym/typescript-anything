@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { UpdateUserInteractor } from "@/usecases/update-user.usecase";
+import { UpdateUserInteractor } from "@/app/api/_core/usecases/update-user.usecase";
 import { ServerUserGateway } from "@/app/api/users/server-user-gateway";
 
 // Create instances of gateways and interactors
@@ -7,7 +7,7 @@ const serverUserGateway = new ServerUserGateway();
 const updateUserInteractor = new UpdateUserInteractor(serverUserGateway);
 
 // Import the DeleteUserUseCase implementation
-import { DeleteUserInteractor } from "@/usecases/delete-user.usecase";
+import { DeleteUserInteractor } from "@/app/api/_core/usecases/delete-user.usecase";
 const deleteUserInteractor = new DeleteUserInteractor(serverUserGateway);
 
 // GET /api/users/[id] - Get user by ID
@@ -21,7 +21,7 @@ export async function GET(
     try {
       const user = await serverUserGateway.getUserById(id);
       return NextResponse.json(user);
-    } catch (error) {
+    } catch {
       return NextResponse.json(
         { error: "User not found" },
         { status: 404 }
@@ -48,7 +48,7 @@ export async function PUT(
     try {
       const updatedUser = await updateUserInteractor.execute(id, userData);
       return NextResponse.json(updatedUser);
-    } catch (error) {
+    } catch {
       return NextResponse.json(
         { error: "User not found" },
         { status: 404 }
@@ -74,7 +74,7 @@ export async function DELETE(
     try {
       await deleteUserInteractor.execute(id);
       return NextResponse.json({ success: true });
-    } catch (error) {
+    } catch {
       return NextResponse.json(
         { error: "User not found" },
         { status: 404 }

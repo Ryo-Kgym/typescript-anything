@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { User } from "@/database/entity/user";
-import { UserFormData } from "@/usecases/types";
+import { UserFormData } from "@/app/api/_core/usecases/types";
 
 interface UserFormProps {
   user?: User;

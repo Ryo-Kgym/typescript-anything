@@ -1,6 +1,6 @@
 import { User } from "@/database/entity/user";
 import { UserFormData } from "./types";
-import { UserGateway } from "@/gateways/user-gateway";
+import { UserGateway } from "@/app/api/_core/gateways/user-gateway";
 
 /**
  * ユーザー更新ユースケースのインターフェース

@@ -1,5 +1,5 @@
 import { User } from "@/database/entity/user";
-import { UserGateway } from "@/gateways/user-gateway";
+import { UserGateway } from "@/app/api/_core/gateways/user-gateway";
 
 /**
  * ユーザー一覧取得ユースケースのインターフェース
