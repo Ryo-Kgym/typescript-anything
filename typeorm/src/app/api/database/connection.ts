@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { User } from "./entity/user";
-import { dbConfig, nodeEnv } from "@/config/env";
+import {dbConfig, nodeEnv} from "../../../config/env";
 
 // Create a singleton DataSource instance
 let dataSource: DataSource | null = null;
