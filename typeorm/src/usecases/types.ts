@@ -1,4 +1,6 @@
-// Interface for user form data
+/**
+ * ユーザーフォームデータのインターフェース
+ */
 export interface UserFormData {
   id: number;
   firstName: string;

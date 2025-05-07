@@ -3,13 +3,13 @@ import { UserFormData } from "@/usecases/types";
 import { UserGateway } from "./user-gateway";
 
 /**
- * API implementation of the User Gateway
- * This class handles all API calls related to users
+ * ユーザーゲートウェイのAPI実装
+ * このクラスはユーザーに関連するすべてのAPI呼び出しを処理する
  */
 export class ApiUserGateway implements UserGateway {
   /**
-   * Get all users from the API
-   * @returns Promise with array of users
+   * APIからすべてのユーザーを取得する
+   * @returns ユーザーの配列を含むPromise
    */
   async getUsers(): Promise<User[]> {
     const response = await fetch("/api/users");
@@ -20,9 +20,9 @@ export class ApiUserGateway implements UserGateway {
   }
 
   /**
-   * Get a user by ID from the API
-   * @param id The ID of the user to fetch
-   * @returns Promise with the user
+   * APIからIDによりユーザーを取得する
+   * @param id 取得するユーザーのID
+   * @returns ユーザーを含むPromise
    */
   async getUserById(id: number): Promise<User> {
     const response = await fetch(`/api/users/${id}`);
@@ -33,9 +33,9 @@ export class ApiUserGateway implements UserGateway {
   }
 
   /**
-   * Create a new user via the API
-   * @param userData The user data to create
-   * @returns Promise with the created user
+   * APIを介して新しいユーザーを作成する
+   * @param userData 作成するユーザーデータ
+   * @returns 作成されたユーザーを含むPromise
    */
   async createUser(userData: Omit<UserFormData, "id">): Promise<User> {
     const response = await fetch("/api/users", {
@@ -53,10 +53,10 @@ export class ApiUserGateway implements UserGateway {
   }
 
   /**
-   * Update an existing user via the API
-   * @param id The ID of the user to update
-   * @param userData The updated user data
-   * @returns Promise with the updated user
+   * APIを介して既存のユーザーを更新する
+   * @param id 更新するユーザーのID
+   * @param userData 更新されたユーザーデータ
+   * @returns 更新されたユーザーを含むPromise
    */
   async updateUser(id: number, userData: Omit<UserFormData, "id">): Promise<User> {
     const response = await fetch(`/api/users/${id}`, {
@@ -74,8 +74,8 @@ export class ApiUserGateway implements UserGateway {
   }
 
   /**
-   * Delete a user via the API
-   * @param id The ID of the user to delete
+   * APIを介してユーザーを削除する
+   * @param id 削除するユーザーのID
    */
   async deleteUser(id: number): Promise<void> {
     const response = await fetch(`/api/users/${id}`, {
