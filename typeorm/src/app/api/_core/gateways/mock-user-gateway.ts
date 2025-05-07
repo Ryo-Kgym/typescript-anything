@@ -1,4 +1,4 @@
-import { User } from "../../database/entity/user";
+import { User } from "../domain/user"
 import { UserFormData } from "../usecases/types";
 import { UserGateway } from "./user-gateway";
 
@@ -46,7 +46,15 @@ export class MockUserGateway implements UserGateway {
     if (!user) {
       throw new Error(`User with ID ${id} not found`);
     }
-    return { ...user };
+    return new User(
+      user.id,
+      user.firstName,
+      user.lastName,
+      user.email,
+      user.isActive,
+      user.createdAt,
+      user.updatedAt
+    );
   }
 
   /**
@@ -56,14 +64,18 @@ export class MockUserGateway implements UserGateway {
    */
   async createUser(userData: Omit<UserFormData, "id">): Promise<User> {
     const now = new Date();
-    const newUser: User = {
-      id: this.nextId++,
-      ...userData,
-      createdAt: now,
-      updatedAt: now
-    };
+    const id = this.nextId++;
+    const newUser = new User(
+      id,
+      userData.firstName,
+      userData.lastName,
+      userData.email,
+      userData.isActive,
+      now,
+      now
+    );
     this.users.push(newUser);
-    return { ...newUser };
+    return newUser;
   }
 
   /**
@@ -78,14 +90,19 @@ export class MockUserGateway implements UserGateway {
       throw new Error(`User with ID ${id} not found`);
     }
 
-    const updatedUser: User = {
-      ...this.users[index],
-      ...userData,
-      updatedAt: new Date()
-    };
+    const existingUser = this.users[index];
+    const updatedUser = new User(
+      existingUser.id,
+      userData.firstName ?? existingUser.firstName,
+      userData.lastName ?? existingUser.lastName,
+      userData.email ?? existingUser.email,
+      userData.isActive ?? existingUser.isActive,
+      existingUser.createdAt,
+      new Date()
+    );
 
     this.users[index] = updatedUser;
-    return { ...updatedUser };
+    return updatedUser;
   }
 
   /**

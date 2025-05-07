@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { DeleteUserInteractor } from '../delete-user.usecase';
 import { MockUserGateway } from '../../gateways/mock-user-gateway';
-import { User } from '../../../database/entity/user';
+import { User } from '../../domain/user';
 
 describe('DeleteUserInteractor', () => {
   let mockUserGateway: MockUserGateway;
@@ -15,15 +15,15 @@ describe('DeleteUserInteractor', () => {
 
     // テスト用の既存ユーザーを作成
     const now = new Date();
-    existingUser = {
-      id: 1,
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
-      isActive: true,
-      createdAt: now,
-      updatedAt: now
-    };
+    existingUser = new User(
+      1,
+      'John',
+      'Doe',
+      'john@example.com',
+      true,
+      now,
+      now
+    );
     mockUserGateway.setUsers([existingUser]);
   });
 
@@ -47,15 +47,17 @@ describe('DeleteUserInteractor', () => {
 
   it('指定されたユーザーのみを削除すること', async () => {
     // Arrange
-    const secondUser: User = {
-      id: 2,
-      firstName: 'Jane',
-      lastName: 'Smith',
-      email: 'jane@example.com',
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
+    const createdAt = new Date();
+    const updatedAt = new Date();
+    const secondUser = new User(
+      2,
+      'Jane',
+      'Smith',
+      'jane@example.com',
+      true,
+      createdAt,
+      updatedAt
+    );
     mockUserGateway.setUsers([existingUser, secondUser]);
 
     const initialUsers = await mockUserGateway.getUsers();
@@ -67,14 +69,17 @@ describe('DeleteUserInteractor', () => {
     // Assert
     const users = await mockUserGateway.getUsers();
     expect(users).toHaveLength(1);
-    expect(users[0]).toEqual({
-      id: 2,
-      firstName: 'Jane',
-      lastName: 'Smith',
-      email: 'jane@example.com',
-      isActive: true,
-      createdAt: users[0].createdAt,
-      updatedAt: users[0].updatedAt
-    });
+    expect(users[0]).toBeInstanceOf(User);
+    expect(users[0]).toEqual(
+      new User(
+        2,
+        'Jane',
+        'Smith',
+        'jane@example.com',
+        true,
+        users[0].createdAt,
+        users[0].updatedAt
+      )
+    );
   });
 });

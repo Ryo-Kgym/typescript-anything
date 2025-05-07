@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { User } from "./entity/user";
-import {dbConfig, nodeEnv} from "../../../config/env";
+import { TypeOrmUser } from "./entity/type-orm-user";
+import {dbConfig, nodeEnv} from "../../../../../config/env";
 
 // Create a singleton DataSource instance
 let dataSource: DataSource | null = null;
@@ -20,7 +20,7 @@ export const getDataSource = async (): Promise<DataSource> => {
     database: dbConfig.database,
     synchronize: dbConfig.synchronize, // Auto-create database schema (not recommended for production)
     logging: nodeEnv !== "production",
-    entities: [User],
+    entities: [TypeOrmUser],
   });
 
   return await dataSource.initialize();

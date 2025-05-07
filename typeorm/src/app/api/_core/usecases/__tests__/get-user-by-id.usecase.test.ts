@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { GetUserByIdInteractor } from '../get-user-by-id.usecase';
 import { MockUserGateway } from '../../gateways/mock-user-gateway';
-import { User } from '../../../database/entity/user';
+import { User } from '../../domain/user';
 
 describe('GetUserByIdInteractor', () => {
   let mockUserGateway: MockUserGateway;
@@ -15,30 +15,35 @@ describe('GetUserByIdInteractor', () => {
 
   it('ユーザーが存在する場合、ユーザーを返すこと', async () => {
     // Arrange
-    const mockUser: User = {
-      id: 1,
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
+    const createdAt = new Date();
+    const updatedAt = new Date();
+    const mockUser = new User(
+      1,
+      'John',
+      'Doe',
+      'john@example.com',
+      true,
+      createdAt,
+      updatedAt
+    );
     mockUserGateway.setUsers([mockUser]);
 
     // Act
     const result = await getUserByIdInteractor.execute(1);
 
     // Assert
-    expect(result).toEqual({
-      id: 1,
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
-      isActive: true,
-      createdAt: result.createdAt,
-      updatedAt: result.updatedAt
-    });
+    expect(result).toBeInstanceOf(User);
+    expect(result).toEqual(
+      new User(
+        1,
+        'John',
+        'Doe',
+        'john@example.com',
+        true,
+        result.createdAt,
+        result.updatedAt
+      )
+    );
   });
 
   it('ユーザーが存在しない場合、エラーをスローすること', async () => {

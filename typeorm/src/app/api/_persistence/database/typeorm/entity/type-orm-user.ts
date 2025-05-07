@@ -5,7 +5,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
  * データベースのユーザーテーブルに対応するエンティティクラス
  */
 @Entity()
-export class User {
+export class TypeOrmUser {
   @PrimaryGeneratedColumn()
   id: number;
 

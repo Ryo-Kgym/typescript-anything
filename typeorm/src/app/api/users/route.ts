@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CreateUserInteractor } from "../_core/usecases/create-user.usecase";
-import { serverUserGateway } from "./server-user-gateway";
+import {serverUserGateway} from "../_persistence/database/typeorm/repository/server-user-gateway";
 
 // Create instances of interactors
 const createUserInteractor = new CreateUserInteractor(serverUserGateway);

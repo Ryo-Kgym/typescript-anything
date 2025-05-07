@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { GetUsersInteractor } from '../get-users.usecase';
 import { MockUserGateway } from '../../gateways/mock-user-gateway';
-import { User } from '../../../database/entity/user';
+import { User } from '../../domain/user';
 
 describe('GetUsersInteractor', () => {
   let mockUserGateway: MockUserGateway;
@@ -26,25 +26,30 @@ describe('GetUsersInteractor', () => {
 
   it('すべてのユーザーを返すこと', async () => {
     // Arrange
+    const createdAt1 = new Date();
+    const updatedAt1 = new Date();
+    const createdAt2 = new Date();
+    const updatedAt2 = new Date();
+
     const mockUsers: User[] = [
-      {
-        id: 1,
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john@example.com',
-        isActive: true,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        id: 2,
-        firstName: 'Jane',
-        lastName: 'Smith',
-        email: 'jane@example.com',
-        isActive: true,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
+      new User(
+        1,
+        'John',
+        'Doe',
+        'john@example.com',
+        true,
+        createdAt1,
+        updatedAt1
+      ),
+      new User(
+        2,
+        'Jane',
+        'Smith',
+        'jane@example.com',
+        true,
+        createdAt2,
+        updatedAt2
+      )
     ];
     mockUserGateway.setUsers(mockUsers);
 
@@ -53,23 +58,29 @@ describe('GetUsersInteractor', () => {
 
     // Assert
     expect(result).toHaveLength(2);
-    expect(result[0]).toEqual({
-      id: 1,
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
-      isActive: true,
-      createdAt: result[0].createdAt,
-      updatedAt: result[0].updatedAt
-    });
-    expect(result[1]).toEqual({
-      id: 2,
-      firstName: 'Jane',
-      lastName: 'Smith',
-      email: 'jane@example.com',
-      isActive: true,
-      createdAt: result[1].createdAt,
-      updatedAt: result[1].updatedAt
-    });
+    expect(result[0]).toBeInstanceOf(User);
+    expect(result[0]).toEqual(
+      new User(
+        1,
+        'John',
+        'Doe',
+        'john@example.com',
+        true,
+        result[0].createdAt,
+        result[0].updatedAt
+      )
+    );
+    expect(result[1]).toBeInstanceOf(User);
+    expect(result[1]).toEqual(
+      new User(
+        2,
+        'Jane',
+        'Smith',
+        'jane@example.com',
+        true,
+        result[1].createdAt,
+        result[1].updatedAt
+      )
+    );
   });
 });

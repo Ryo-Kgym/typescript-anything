@@ -1,4 +1,4 @@
-import { User } from "../../database/entity/user";
+import { User } from "../domain/user";
 import { UserFormData } from "./types";
 import { UserGateway } from "../gateways/user-gateway";
 
