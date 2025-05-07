@@ -1,6 +1,5 @@
 import { User } from "@/database/entity/user";
 import { UserGateway } from "@/gateways/user-gateway";
-import apiUserGateway from "@/gateways/api-user-gateway";
 
 /**
  * IDによるユーザー取得ユースケースのインターフェース
@@ -32,7 +31,3 @@ export class GetUserByIdInteractor implements GetUserByIdUseCase {
     return await this.userGateway.getUserById(id);
   }
 }
-
-// Export a singleton instance for convenience
-const getUserByIdInteractor = new GetUserByIdInteractor(apiUserGateway);
-export default getUserByIdInteractor;

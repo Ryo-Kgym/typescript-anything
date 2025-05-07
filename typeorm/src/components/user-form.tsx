@@ -3,8 +3,6 @@
 import { useState, useEffect } from "react";
 import { User } from "@/database/entity/user";
 import { UserFormData } from "@/usecases/types";
-import createUserInteractor from "@/usecases/create-user.usecase";
-import updateUserInteractor from "@/usecases/update-user.usecase";
 
 interface UserFormProps {
   user?: User;
@@ -57,22 +55,37 @@ export default function UserForm({ user, isEditing, onSuccess, onCancel }: UserF
     setLoading(true);
 
     try {
+      const userData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        isActive: formData.isActive,
+      };
+
+      let response;
+
       if (isEditing && formData.id) {
-        // Update existing user
-        await updateUserInteractor.execute(formData.id, {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          isActive: formData.isActive,
+        // Update existing user using fetch
+        response = await fetch(`/api/users/${formData.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
         });
       } else {
-        // Create new user
-        await createUserInteractor.execute({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          isActive: formData.isActive,
+        // Create new user using fetch
+        response = await fetch("/api/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
         });
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       // Reset form and notify parent component

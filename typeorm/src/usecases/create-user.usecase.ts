@@ -1,7 +1,6 @@
 import { User } from "@/database/entity/user";
 import { UserFormData } from "./types";
 import { UserGateway } from "@/gateways/user-gateway";
-import apiUserGateway from "@/gateways/api-user-gateway";
 
 /**
  * ユーザー作成ユースケースのインターフェース
@@ -33,7 +32,3 @@ export class CreateUserInteractor implements CreateUserUseCase {
     return await this.userGateway.createUser(userData);
   }
 }
-
-// Export a singleton instance for convenience
-const createUserInteractor = new CreateUserInteractor(apiUserGateway);
-export default createUserInteractor;

@@ -1,7 +1,6 @@
 import { User } from "@/database/entity/user";
 import { UserFormData } from "./types";
 import { UserGateway } from "@/gateways/user-gateway";
-import apiUserGateway from "@/gateways/api-user-gateway";
 
 /**
  * ユーザー更新ユースケースのインターフェース
@@ -34,7 +33,3 @@ export class UpdateUserInteractor implements UpdateUserUseCase {
     return await this.userGateway.updateUser(id, userData);
   }
 }
-
-// Export a singleton instance for convenience
-const updateUserInteractor = new UpdateUserInteractor(apiUserGateway);
-export default updateUserInteractor;

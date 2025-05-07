@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { UserRepository } from "@/database/repository/user-repository";
+import { CreateUserInteractor } from "@/usecases/create-user.usecase";
+import { serverUserGateway } from "./server-user-gateway";
+
+// Create instances of interactors
+const createUserInteractor = new CreateUserInteractor(serverUserGateway);
 
 // GET /api/users - Get all users
 export async function GET() {
   try {
-    const users = await UserRepository.findAll();
+    const users = await serverUserGateway.getUsers();
     return NextResponse.json(users);
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -19,7 +23,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const userData = await request.json();
-    const user = await UserRepository.create(userData);
+    const user = await createUserInteractor.execute(userData);
     return NextResponse.json(user, { status: 201 });
   } catch (error) {
     console.error("Error creating user:", error);

@@ -1,6 +1,5 @@
 import { User } from "@/database/entity/user";
 import { UserGateway } from "@/gateways/user-gateway";
-import apiUserGateway from "@/gateways/api-user-gateway";
 
 /**
  * ユーザー一覧取得ユースケースのインターフェース
@@ -31,7 +30,3 @@ export class GetUsersInteractor implements GetUsersUseCase {
     return await this.userGateway.getUsers();
   }
 }
-
-// Export a singleton instance for convenience
-const getUsersInteractor = new GetUsersInteractor(apiUserGateway);
-export default getUsersInteractor;

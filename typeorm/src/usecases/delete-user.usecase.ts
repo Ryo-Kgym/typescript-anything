@@ -1,5 +1,4 @@
 import { UserGateway } from "@/gateways/user-gateway";
-import apiUserGateway from "@/gateways/api-user-gateway";
 
 /**
  * ユーザー削除ユースケースのインターフェース
@@ -31,6 +30,3 @@ export class DeleteUserInteractor implements DeleteUserUseCase {
   }
 }
 
-// Export a singleton instance for convenience
-const deleteUserInteractor = new DeleteUserInteractor(apiUserGateway);
-export default deleteUserInteractor;

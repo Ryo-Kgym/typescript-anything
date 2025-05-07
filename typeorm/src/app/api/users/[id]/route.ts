@@ -1,5 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { UserRepository } from "@/database/repository/user-repository";
+import { UpdateUserInteractor } from "@/usecases/update-user.usecase";
+import { ServerUserGateway } from "@/app/api/users/server-user-gateway";
+
+// Create instances of gateways and interactors
+const serverUserGateway = new ServerUserGateway();
+const updateUserInteractor = new UpdateUserInteractor(serverUserGateway);
+
+// Import the DeleteUserUseCase implementation
+import { DeleteUserInteractor } from "@/usecases/delete-user.usecase";
+const deleteUserInteractor = new DeleteUserInteractor(serverUserGateway);
 
 // GET /api/users/[id] - Get user by ID
 export async function GET(
@@ -8,16 +17,16 @@ export async function GET(
 ) {
   try {
     const id = parseInt(params.id);
-    const user = await UserRepository.findById(id);
 
-    if (!user) {
+    try {
+      const user = await serverUserGateway.getUserById(id);
+      return NextResponse.json(user);
+    } catch (error) {
       return NextResponse.json(
         { error: "User not found" },
         { status: 404 }
       );
     }
-
-    return NextResponse.json(user);
   } catch (error) {
     console.error("Error fetching user:", error);
     return NextResponse.json(
@@ -35,16 +44,16 @@ export async function PUT(
   try {
     const id = parseInt(params.id);
     const userData = await request.json();
-    const updatedUser = await UserRepository.update(id, userData);
 
-    if (!updatedUser) {
+    try {
+      const updatedUser = await updateUserInteractor.execute(id, userData);
+      return NextResponse.json(updatedUser);
+    } catch (error) {
       return NextResponse.json(
         { error: "User not found" },
         { status: 404 }
       );
     }
-
-    return NextResponse.json(updatedUser);
   } catch (error) {
     console.error("Error updating user:", error);
     return NextResponse.json(
@@ -61,16 +70,16 @@ export async function DELETE(
 ) {
   try {
     const id = parseInt(params.id);
-    const success = await UserRepository.delete(id);
 
-    if (!success) {
+    try {
+      await deleteUserInteractor.execute(id);
+      return NextResponse.json({ success: true });
+    } catch (error) {
       return NextResponse.json(
         { error: "User not found" },
         { status: 404 }
       );
     }
-
-    return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting user:", error);
     return NextResponse.json(

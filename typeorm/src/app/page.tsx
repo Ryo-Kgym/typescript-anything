@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { User } from "@/database/entity/user";
 import UserForm from "@/components/user-form";
 import UserList from "@/components/user-list";
-import getUsersInteractor from "@/usecases/get-users.usecase";
 
 export default function Home() {
   // State for users list
@@ -28,7 +27,11 @@ export default function Home() {
   const loadUsers = async () => {
     setLoading(true);
     try {
-      const data = await getUsersInteractor.execute();
+      const response = await fetch("/api/users");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
       setUsers(data);
     } catch (err) {
       console.error("Error fetching users:", err);

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { User } from "@/database/entity/user";
-import deleteUserInteractor from "@/usecases/delete-user.usecase";
 
 interface UserListProps {
   users: User[];
@@ -23,7 +22,13 @@ export default function UserList({ users, loading, onEdit, onRefresh }: UserList
 
     setDeleteLoading(true);
     try {
-      await deleteUserInteractor.execute(id);
+      const response = await fetch(`/api/users/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
       // Refresh the user list
       onRefresh();
