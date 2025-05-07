@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { User } from "@/database/entity/user";
-import { UserFormData } from "@/app/api/_core/usecases/types";
+import { User } from "../app/api/database/entity/user";
+import { UserFormData } from "../app/api/_core/usecases/types";
 
 interface UserFormProps {
   user?: User;

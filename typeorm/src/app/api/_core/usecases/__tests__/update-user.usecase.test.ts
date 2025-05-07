@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { UpdateUserInteractor } from '../update-user.usecase';
-import { MockUserGateway } from '@/gateways/mock-user-gateway';
-import { User } from '@/database/entity/user';
+import { MockUserGateway } from '../../gateways/mock-user-gateway';
+import { User } from '../../../database/entity/user';
 import { UserFormData } from '../types';
 
 describe('UpdateUserInteractor', () => {

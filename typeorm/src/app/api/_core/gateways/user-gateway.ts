@@ -1,5 +1,5 @@
-import { User } from "@/database/entity/user";
-import { UserFormData } from "@/app/api/_core/usecases/types";
+import { User } from "../../database/entity/user";
+import { UserFormData } from "../usecases/types";
 
 /**
  * ユーザーゲートウェイのインターフェース

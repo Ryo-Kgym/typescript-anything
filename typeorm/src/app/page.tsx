@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { User } from "@/database/entity/user";
-import UserForm from "@/components/user-form";
-import UserList from "@/components/user-list";
+import { User } from "./api/database/entity/user";
+import UserForm from "../components/user-form";
+import UserList from "../components/user-list";
 
 export default function Home() {
   // State for users list

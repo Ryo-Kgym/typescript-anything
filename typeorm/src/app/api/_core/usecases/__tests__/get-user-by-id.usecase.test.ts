@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { GetUserByIdInteractor } from '../get-user-by-id.usecase';
-import { MockUserGateway } from '@/gateways/mock-user-gateway';
-import { User } from '@/database/entity/user';
+import { MockUserGateway } from '../../gateways/mock-user-gateway';
+import { User } from '../../../database/entity/user';
 
 describe('GetUserByIdInteractor', () => {
   let mockUserGateway: MockUserGateway;

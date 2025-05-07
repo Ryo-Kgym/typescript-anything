@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { CreateUserInteractor } from "@/app/api/_core/usecases/create-user.usecase";
+import { CreateUserInteractor } from "../_core/usecases/create-user.usecase";
 import { serverUserGateway } from "./server-user-gateway";
 
 // Create instances of interactors

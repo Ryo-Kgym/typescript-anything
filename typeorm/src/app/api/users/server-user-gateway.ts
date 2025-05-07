@@ -1,7 +1,7 @@
-import { UserGateway } from "@/app/api/_core/gateways/user-gateway";
-import { User } from "@/database/entity/user";
-import { UserFormData } from "@/app/api/_core/usecases/types";
-import { UserRepository } from "@/database/repository/user-repository";
+import { UserGateway } from "../_core/gateways/user-gateway";
+import { User } from "../database/entity/user";
+import { UserFormData } from "../_core/usecases/types";
+import { UserRepository } from "../database/repository/user-repository";
 
 /**
  * サーバーサイドのユーザーゲートウェイ実装

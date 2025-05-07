@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { User } from "@/database/entity/user";
+import { User } from "../app/api/database/entity/user";
 
 interface UserListProps {
   users: User[];

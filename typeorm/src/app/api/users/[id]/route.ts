@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { UpdateUserInteractor } from "@/app/api/_core/usecases/update-user.usecase";
-import { ServerUserGateway } from "@/app/api/users/server-user-gateway";
+import { UpdateUserInteractor } from "../../_core/usecases/update-user.usecase";
+import { ServerUserGateway } from "../server-user-gateway";
 
 // Create instances of gateways and interactors
 const serverUserGateway = new ServerUserGateway();
 const updateUserInteractor = new UpdateUserInteractor(serverUserGateway);
 
 // Import the DeleteUserUseCase implementation
-import { DeleteUserInteractor } from "@/app/api/_core/usecases/delete-user.usecase";
+import { DeleteUserInteractor } from "../../_core/usecases/delete-user.usecase";
 const deleteUserInteractor = new DeleteUserInteractor(serverUserGateway);
 
 // GET /api/users/[id] - Get user by ID
