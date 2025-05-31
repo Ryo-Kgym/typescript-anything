@@ -1,0 +1,4 @@
+**/node_modules/
+**/dist/
+pglite-adapter-prisma/src/pglite/
+/pglite-adapter-prisma/.env
