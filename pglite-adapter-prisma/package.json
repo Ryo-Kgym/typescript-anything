@@ -1,0 +1,37 @@
+{
+  "name": "pglite-adapter-prisma",
+  "version": "0.1.0",
+  "description": "PGlite adapter for Prisma",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "prisma",
+    "pglite",
+    "adapter",
+    "database",
+    "postgresql"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@electric-sql/pglite": "^0.3.2",
+    "@prisma/client": "^6.4.1",
+    "pglite-prisma-adapter": "^0.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.29",
+    "eslint": "^9.28.0",
+    "prettier": "^3.0.0",
+    "prisma": "^6.4.1",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  }
+}
